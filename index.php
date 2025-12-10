@@ -1,70 +1,146 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>My First Phone Shop</title>
-    <style>
-        /* 1. BASIC CSS STYLING */
-        body { font-family: sans-serif; background-color: #f4f4f4; padding: 20px; }
-        .shop-container { display: flex; gap: 20px; justify-content: center; }
-        
-        .product-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            width: 250px;
-            text-align: center;
-        }
-        .product-card img { width: 100px; height: auto; margin-bottom: 10px; }
-        .price { color: green; font-weight: bold; font-size: 1.2em; }
-        .btn { 
-            background-color: #007bff; color: white; 
-            padding: 10px; text-decoration: none; border-radius: 5px; 
-            display: inline-block; margin-top: 10px;
-        }
-    </style>
-</head>
-<body>
+<?php
+/**
+ * Homepage
+ * Displays featured products and categories
+ */
 
-    <h1 style="text-align:center;">Welcome to PhoneStore</h1>
+$pageTitle = 'Home';
+require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/templates/header.php';
 
-    <?php
-    // 2. THE "FAKE" DATABASE (PHP Array)
-    // Instead of SQL, we type the data right here.
-    $products = [
-        [
-            "name" => "iPhone 15",
-            "price" => 999,
-            "image" => "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/IPhone_15_logo.svg/100px-IPhone_15_logo.svg.png" 
-        ],
-        [
-            "name" => "Samsung S24",
-            "price" => 899,
-            "image" => "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Samsung_Galaxy_S24_Logo.svg/100px-Samsung_Galaxy_S24_Logo.svg.png"
-        ],
-        [
-            "name" => "Google Pixel 8",
-            "price" => 699,
-            "image" => "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Google_Pixel_8_logo.svg/100px-Google_Pixel_8_logo.svg.png"
-        ]
-    ];
-    ?>
+// Get featured products
+$featuredProducts = getProducts(['featured' => true, 'limit' => 4]);
 
-    <div class="shop-container">
-        <?php foreach ($products as $product): ?>
-            
-            <div class="product-card">
-                <img src="<?php echo $product['image']; ?>" alt="Phone">
-                
-                <h3><?php echo $product['name']; ?></h3>
-                <div class="price">$<?php echo $product['price']; ?></div>
-                
-                <a href="#" class="btn">Add to Cart</a>
-            </div>
+// Get latest products
+$latestProducts = getProducts(['limit' => 8]);
 
-        <?php endforeach; ?>
+// Get categories
+$categories = getCategories();
+?>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Welcome to <?php echo SITE_NAME; ?></h1>
+        <p>Discover the latest electronics and gadgets at unbeatable prices. Quality products, fast shipping, and excellent customer service.</p>
+        <a href="<?php echo url('products.php'); ?>" class="btn btn-lg">Shop Now</a>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section mb-4">
+    <div class="section-header">
+        <h2 class="section-title">Shop by Category</h2>
+        <a href="<?php echo url('products.php'); ?>" class="section-link">View All</a>
     </div>
 
-</body>
-</html>
+    <div class="products-grid">
+        <?php foreach ($categories as $category): ?>
+            <a href="<?php echo url('products.php?category=' . $category['id']); ?>" class="card" style="text-decoration: none;">
+                <div class="card-body text-center">
+                    <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;"><?php echo escape($category['name']); ?></h3>
+                    <p class="text-muted"><?php echo escape(truncate($category['description'], 80)); ?></p>
+                </div>
+            </a>
+        <?php endforeach; ?>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<?php if (!empty($featuredProducts)): ?>
+<section class="featured-products mb-4">
+    <div class="section-header">
+        <h2 class="section-title">Featured Products</h2>
+        <a href="<?php echo url('products.php'); ?>" class="section-link">View All</a>
+    </div>
+
+    <div class="products-grid">
+        <?php foreach ($featuredProducts as $product): ?>
+            <div class="product-card">
+                <div class="product-image">
+                    <?php if ($product['sale_price']): ?>
+                        <span class="product-badge badge-sale">Sale</span>
+                    <?php elseif ($product['is_featured']): ?>
+                        <span class="product-badge badge-featured">Featured</span>
+                    <?php endif; ?>
+                    <a href="<?php echo url('product.php?id=' . $product['id']); ?>">
+                        <img src="<?php echo getProductImageUrl($product['image']); ?>" alt="<?php echo escape($product['name']); ?>">
+                    </a>
+                </div>
+                <div class="product-info">
+                    <div class="product-category"><?php echo escape($product['category_name'] ?? 'Uncategorized'); ?></div>
+                    <h3 class="product-name">
+                        <a href="<?php echo url('product.php?id=' . $product['id']); ?>"><?php echo escape($product['name']); ?></a>
+                    </h3>
+                    <div class="product-price">
+                        <?php if ($product['sale_price']): ?>
+                            <span class="price-current"><?php echo formatPrice($product['sale_price']); ?></span>
+                            <span class="price-original"><?php echo formatPrice($product['price']); ?></span>
+                        <?php else: ?>
+                            <span class="price-current"><?php echo formatPrice($product['price']); ?></span>
+                        <?php endif; ?>
+                    </div>
+                    <div class="product-actions">
+                        <a href="<?php echo url('product.php?id=' . $product['id']); ?>" class="btn btn-outline">View</a>
+                        <form action="<?php echo url('cart.php'); ?>" method="POST" style="flex: 1;">
+                            <input type="hidden" name="action" value="add">
+                            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                            <?php echo csrfField(); ?>
+                            <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</section>
+<?php endif; ?>
+
+<!-- Latest Products -->
+<section class="latest-products">
+    <div class="section-header">
+        <h2 class="section-title">Latest Products</h2>
+        <a href="<?php echo url('products.php?sort=newest'); ?>" class="section-link">View All</a>
+    </div>
+
+    <div class="products-grid">
+        <?php foreach ($latestProducts as $product): ?>
+            <div class="product-card">
+                <div class="product-image">
+                    <?php if ($product['sale_price']): ?>
+                        <span class="product-badge badge-sale">Sale</span>
+                    <?php endif; ?>
+                    <a href="<?php echo url('product.php?id=' . $product['id']); ?>">
+                        <img src="<?php echo getProductImageUrl($product['image']); ?>" alt="<?php echo escape($product['name']); ?>">
+                    </a>
+                </div>
+                <div class="product-info">
+                    <div class="product-category"><?php echo escape($product['category_name'] ?? 'Uncategorized'); ?></div>
+                    <h3 class="product-name">
+                        <a href="<?php echo url('product.php?id=' . $product['id']); ?>"><?php echo escape($product['name']); ?></a>
+                    </h3>
+                    <div class="product-price">
+                        <?php if ($product['sale_price']): ?>
+                            <span class="price-current"><?php echo formatPrice($product['sale_price']); ?></span>
+                            <span class="price-original"><?php echo formatPrice($product['price']); ?></span>
+                        <?php else: ?>
+                            <span class="price-current"><?php echo formatPrice($product['price']); ?></span>
+                        <?php endif; ?>
+                    </div>
+                    <div class="product-actions">
+                        <a href="<?php echo url('product.php?id=' . $product['id']); ?>" class="btn btn-outline">View</a>
+                        <form action="<?php echo url('cart.php'); ?>" method="POST" style="flex: 1;">
+                            <input type="hidden" name="action" value="add">
+                            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                            <?php echo csrfField(); ?>
+                            <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</section>
+
+<?php require_once __DIR__ . '/templates/footer.php'; ?>
