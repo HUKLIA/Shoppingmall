@@ -6,20 +6,17 @@ Options -Indexes
 
 # Prevent access to sensitive files
 <FilesMatch "^\.">
-    Order allow,deny
-    Deny from all
+    Require all denied
 </FilesMatch>
 
 # Protect config files
 <FilesMatch "config\.php$">
-    Order allow,deny
-    Deny from all
+    Require all denied
 </FilesMatch>
 
 # Protect SQL files
 <FilesMatch "\.sql$">
-    Order allow,deny
-    Deny from all
+    Require all denied
 </FilesMatch>
 
 # Set proper MIME types
