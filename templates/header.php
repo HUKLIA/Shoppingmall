@@ -93,8 +93,3 @@ startSecureSession();
             </ul>
         </div>
     </nav>
-
-    <!-- Main Content Container -->
-    <main class="main-content">
-        <div class="container">
-            <?php displayFlash(); ?>

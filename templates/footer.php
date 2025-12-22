@@ -1,8 +1,5 @@
         </div>
-    </main>
-
-    <!-- Footer -->
-    <footer class="main-footer">
+    </footer>
         <div class="container">
             <div class="footer-content">
                 <!-- About Section -->

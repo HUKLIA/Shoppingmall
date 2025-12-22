@@ -19,7 +19,7 @@ $latestProducts = getProducts(['limit' => 8]);
 $categories = getCategories();
 ?>
 
-<!-- Hero Section -->
+<!-- Hero Section (Full Width) -->
 <section class="hero">
     <div class="hero-content">
         <h1>Welcome to <?php echo SITE_NAME; ?></h1>
@@ -27,6 +27,11 @@ $categories = getCategories();
         <a href="<?php echo url('products.php'); ?>" class="btn btn-lg">Shop Now</a>
     </div>
 </section>
+
+<!-- Main Content Container -->
+<main class="main-content">
+    <div class="container">
+        <?php displayFlash(); ?>
 
 <!-- Categories Section -->
 <section class="categories-section mb-4">
@@ -142,5 +147,8 @@ $categories = getCategories();
         <?php endforeach; ?>
     </div>
 </section>
+
+        </div>
+    </main>
 
 <?php require_once __DIR__ . '/templates/footer.php'; ?>

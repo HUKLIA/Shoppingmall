@@ -61,7 +61,7 @@ $cartTotals = getCartTotals();
 require_once __DIR__ . '/templates/header.php';
 ?>
 
-<h1 class="section-title mb-3">Shopping Cart</h1>
+<h1 class="section-title mb-4">Shopping Cart</h1>
 
 <?php if (empty($cartItems)): ?>
     <div class="card">
@@ -77,9 +77,9 @@ require_once __DIR__ . '/templates/header.php';
         </div>
     </div>
 <?php else: ?>
-    <div style="display: grid; grid-template-columns: 1fr 350px; gap: 2rem;">
+    <div class="cart-container">
         <!-- Cart Items -->
-        <div class="card">
+        <div class="card cart-items">
             <?php foreach ($cartItems as $item): ?>
                 <?php $product = $item['product']; ?>
                 <div class="cart-item">
@@ -123,7 +123,7 @@ require_once __DIR__ . '/templates/header.php';
                         </form>
 
                         <!-- Subtotal -->
-                        <div style="font-weight: 600; min-width: 80px; text-align: right;">
+                        <div class="cart-item-subtotal">
                             <?php echo formatPrice($item['subtotal']); ?>
                         </div>
 
@@ -145,14 +145,16 @@ require_once __DIR__ . '/templates/header.php';
 
             <!-- Clear Cart -->
             <div class="card-footer">
-                <form action="<?php echo url('cart.php'); ?>" method="POST" style="display: inline;">
-                    <input type="hidden" name="action" value="clear">
-                    <?php echo csrfField(); ?>
-                    <button type="submit" class="btn btn-outline" onclick="return confirm('Are you sure you want to clear the cart?');">
-                        Clear Cart
-                    </button>
-                </form>
-                <a href="<?php echo url('products.php'); ?>" class="btn btn-secondary">Continue Shopping</a>
+                <div class="cart-footer-actions">
+                    <form action="<?php echo url('cart.php'); ?>" method="POST" style="display: inline;">
+                        <input type="hidden" name="action" value="clear">
+                        <?php echo csrfField(); ?>
+                        <button type="submit" class="btn btn-outline" onclick="return confirm('Are you sure you want to clear the cart?');">
+                            Clear Cart
+                        </button>
+                    </form>
+                    <a href="<?php echo url('products.php'); ?>" class="btn btn-secondary">Continue Shopping</a>
+                </div>
             </div>
         </div>
 

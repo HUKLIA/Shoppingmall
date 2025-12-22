@@ -262,6 +262,23 @@ ul, ol {
 }
 
 /* =====================================================
+   SECTIONS
+   ===================================================== */
+section {
+    margin-bottom: var(--spacing-2xl);
+}
+
+section:last-child {
+    margin-bottom: 0;
+}
+
+.categories-section,
+.featured-products,
+.latest-products {
+    margin-bottom: var(--spacing-2xl);
+}
+
+/* =====================================================
    BUTTONS
    ===================================================== */
 .btn {
@@ -666,13 +683,21 @@ select.form-control {
     padding: var(--spacing-2xl) 0;
     margin-bottom: var(--spacing-xl);
     border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    width: 100%;
 }
 
 .hero-content {
     max-width: 600px;
+    text-align: center;
+    padding-left: var(--spacing-xl);
 }
 
 .hero h1 {
+    text-align: center;
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: var(--spacing-md);
@@ -687,6 +712,9 @@ select.form-control {
 .hero .btn {
     background-color: white;
     color: var(--primary-color);
+    display: block;
+    margin: 0 auto;
+    width: auto;
 }
 
 .hero .btn:hover {
@@ -716,6 +744,16 @@ select.form-control {
 /* =====================================================
    CART PAGE
    ===================================================== */
+.cart-container {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: var(--spacing-2xl);
+}
+
+.cart-items {
+    margin-bottom: var(--spacing-lg);
+}
+
 .cart-item {
     display: grid;
     grid-template-columns: 100px 1fr auto;
@@ -753,12 +791,15 @@ select.form-control {
 .cart-item-price {
     color: var(--primary-color);
     font-weight: 600;
+    font-size: 1.125rem;
 }
 
 .cart-item-actions {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-end;
     gap: var(--spacing-md);
+    min-width: 120px;
 }
 
 .quantity-control {
@@ -766,19 +807,43 @@ select.form-control {
     align-items: center;
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
+    overflow: hidden;
 }
 
 .quantity-control button {
     background: none;
     border: none;
-    padding: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
     cursor: pointer;
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     color: var(--text-color);
+    transition: background-color var(--transition-fast);
 }
 
 .quantity-control button:hover {
     background-color: var(--bg-color);
+}
+
+.quantity-control input {
+    width: 50px;
+    text-align: center;
+    border: none;
+    padding: var(--spacing-sm);
+    font-weight: 600;
+}
+
+.cart-item-subtotal {
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: var(--primary-color);
+    text-align: right;
+}
+
+.cart-footer-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-md);
 }
 
 .quantity-control input {
@@ -1104,8 +1169,42 @@ select.form-control {
 }
 
 /* =====================================================
-   UTILITIES
+   GENERAL TEXT ALIGNMENT
    ===================================================== */
+h1, h2, h3, h4, h5, h6 {
+    text-align: left;
+    line-height: 1.2;
+}
+
+.section-title {
+    text-align: left;
+}
+
+/* Ensure consistent button alignment */
+.btn {
+    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Product card text alignment */
+.product-name {
+    text-align: left;
+}
+
+.product-price {
+    justify-content: flex-start;
+}
+
+/* Cart text alignment */
+.cart-item-details h4 {
+    text-align: left;
+}
+
+.cart-item-price {
+    text-align: left;
+}
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .text-muted { color: var(--text-muted); }
@@ -1219,14 +1318,32 @@ select.form-control {
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     }
 
+    .cart-container {
+        grid-template-columns: 1fr;
+    }
+
     .cart-item {
         grid-template-columns: 80px 1fr;
+        gap: var(--spacing-md);
     }
 
     .cart-item-actions {
         grid-column: span 2;
+        flex-direction: row;
         justify-content: space-between;
+        align-items: center;
         margin-top: var(--spacing-md);
+        min-width: unset;
+    }
+
+    .cart-item-subtotal {
+        text-align: left;
+        margin-left: var(--spacing-md);
+    }
+
+    .cart-footer-actions {
+        flex-direction: column;
+        gap: var(--spacing-sm);
     }
 
     .footer-content {

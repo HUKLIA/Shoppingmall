@@ -665,5 +665,12 @@ function getProductImageUrl($image) {
         return $image;
     }
 
+    // Check if image exists in products directory first
+    $localPath = __DIR__ . '/../assets/images/products/' . $image;
+    if (file_exists($localPath)) {
+        return ASSETS_URL . '/images/products/' . $image;
+    }
+
+    // Fallback to uploads directory
     return UPLOADS_URL . '/products/' . $image;
 }
