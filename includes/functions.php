@@ -180,6 +180,15 @@ function getProducts($options = []) {
             case 'name':
                 $orderBy = 'p.name ASC';
                 break;
+            case 'name_z':
+                $orderBy = 'p.name DESC';
+                break;
+            case 'featured':
+                $orderBy = 'p.is_featured DESC, p.created_at DESC';
+                break;
+            case 'stock_low':
+                $orderBy = 'p.stock_quantity ASC';
+                break;
             case 'newest':
                 $orderBy = 'p.created_at DESC';
                 break;
@@ -666,7 +675,7 @@ function getProductImageUrl($image) {
     }
 
     // Check if image exists in products directory first
-    $localPath = __DIR__ . '/../assets/images/products/' . $image;
+    $localPath = dirname(__DIR__) . '/assets/images/products/' . $image;
     if (file_exists($localPath)) {
         return ASSETS_URL . '/images/products/' . $image;
     }

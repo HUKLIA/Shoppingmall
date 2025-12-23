@@ -82,6 +82,9 @@ require_once __DIR__ . '/templates/header.php';
                     <option value="price_low" <?php echo $sort === 'price_low' ? 'selected' : ''; ?>>Price: Low to High</option>
                     <option value="price_high" <?php echo $sort === 'price_high' ? 'selected' : ''; ?>>Price: High to Low</option>
                     <option value="name" <?php echo $sort === 'name' ? 'selected' : ''; ?>>Name: A-Z</option>
+                    <option value="name_z" <?php echo $sort === 'name_z' ? 'selected' : ''; ?>>Name: Z-A</option>
+                    <option value="featured" <?php echo $sort === 'featured' ? 'selected' : ''; ?>>Featured First</option>
+                    <option value="stock_low" <?php echo $sort === 'stock_low' ? 'selected' : ''; ?>>Stock: Low to High</option>
                 </select>
             </div>
 
