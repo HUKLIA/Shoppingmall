@@ -10,10 +10,10 @@ require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/templates/header.php';
 
 // Get featured products
-$featuredProducts = getProducts(['featured' => true, 'limit' => 4]);
+$featuredProducts = getProducts(['featured' => true, 'limit' => 8]);
 
 // Get latest products
-$latestProducts = getProducts(['limit' => 8]);
+$latestProducts = getProducts(['limit' => 12]);
 
 // Get categories
 $categories = getCategories();
